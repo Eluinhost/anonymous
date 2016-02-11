@@ -40,8 +40,7 @@ open class Disguiser(val baseDisguise: Disguise, plugin: Plugin) : PacketAdapter
             // Don't modify tab if the player isn't disguised as a player
             null, !is PlayerDisguise -> data
             else -> {
-                // Replace skin texture (doesn't work in Minecraft so will end up showing
-                // alex/steve instead of the players usual skin)
+                // Replace skin texture
                 data.profile.properties.replaceValues("textures", disguise.gameProfile.properties.get("textures"))
                 PlayerInfoData(data.profile, data.ping, data.gameMode, WrappedChatComponent.fromText(disguise.name))
             }
