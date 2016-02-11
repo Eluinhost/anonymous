@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin
 import java.util.*
 
 open class Disguiser(val baseDisguise: Disguise, plugin: Plugin) : PacketAdapter(plugin, PacketType.Play.Server.PLAYER_INFO), Listener {
-    constructor(name: String, skin: UUID, plugin: Plugin) : this(PlayerDisguise(WrappedGameProfile(skin, name)), plugin)
+    constructor(name: String, skin: UUID, plugin: Plugin) : this(PlayerDisguise(WrappedGameProfile(skin, name)).setViewSelfDisguise(false), plugin)
 
     @EventHandler
     open fun on(event: PlayerJoinEvent) = disguisePlayer(event.player)
