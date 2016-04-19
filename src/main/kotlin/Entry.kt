@@ -1,11 +1,17 @@
 package gg.uhc.anonymous
 
 import com.comphenix.protocol.ProtocolLibrary
+import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
+import org.bukkit.event.Listener
+import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 
 const val USERNAME_KEY: String = "username"
 const val SKIN_KEY: String = "skin"
+const val DISABLE_CHAT_KEY = "disable chat"
+const val CHAT_BYPASS_PERMISSION = "anonymous.chat.bypass"
 
 class Entry() : JavaPlugin() {
     var disguiser: Disguiser? = null
@@ -45,5 +51,17 @@ class Entry() : JavaPlugin() {
         server.onlinePlayers.forEach { disguiser.disguisePlayer(it) }
 
         this.disguiser = disguiser
+
+        // Disable chat if required
+        if (config.getBoolean(DISABLE_CHAT_KEY)) {
+            server.pluginManager.registerEvents(object: Listener {
+                @EventHandler(priority = EventPriority.HIGH)
+                fun on(event: AsyncPlayerChatEvent) {
+                    if (event.player.hasPermission(CHAT_BYPASS_PERMISSION).not()) {
+                        event.isCancelled = true
+                    }
+                }
+            }, this);
+        }
     }
 }
