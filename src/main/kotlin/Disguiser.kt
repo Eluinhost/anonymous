@@ -47,12 +47,13 @@ open class Disguiser(val baseDisguise: Disguise, plugin: Plugin) : PacketAdapter
         }
     }
 
-    /**
-     * Undisguises the player first if required
-     */
     open fun disguisePlayer(player: Player) {
         if (DisguiseAPI.isDisguised(player)) return
 
         DisguiseAPI.disguiseEntity(player, baseDisguise)
+
+        if (baseDisguise is PlayerDisguise) {
+            player.displayName = baseDisguise.name
+        }
     }
 }
