@@ -3,7 +3,7 @@ main: ${project.groupId}.${project.artifactId}.Entry
 version: ${project.version}
 author: ghowden/Eluinhost
 database: false
-depend: [LibsDisguises, ProtocolLib]
+depend: [ProtocolLib]
 permissions:
   anonymous.chat.bypass:
     default: op
