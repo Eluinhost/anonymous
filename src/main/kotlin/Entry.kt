@@ -11,9 +11,11 @@ import java.util.*
 const val USERNAME_KEY: String = "username"
 const val SKIN_KEY: String = "skin"
 const val DISABLE_CHAT_KEY = "disable chat"
+const val REWRITE_JOIN_LEAVES_KEY = "rewrite joins and leaves"
 
 const val CHAT_BYPASS_PERMISSION = "anonymous.chat.bypass"
 const val SKIN_BYPASS_PERMISSION = "anonymous.skin.bypass"
+const val JOIN_LEAVE_BYPASS_PERMISSION = "anonymous.joinleave.bypass"
 
 class Entry() : JavaPlugin() {
     protected var disguiser: DisguiseController? = null
@@ -59,6 +61,10 @@ class Entry() : JavaPlugin() {
                     }
                 }
             }, this);
+        }
+
+        if (config.getBoolean(REWRITE_JOIN_LEAVES_KEY)) {
+            server.pluginManager.registerEvents(JoinLeaveListener(this), this)
         }
     }
 }

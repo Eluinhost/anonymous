@@ -11,14 +11,32 @@ Configuration:
 ```yaml
 username: Anonymous
 skin: 640a5372-780b-4c2a-b7e7-8359d2f9a6a8
-disable chat: true
+disable chat: false
+rewrite joins and leaves: true
 ```
 
-`username` = name above head
+`username`
 
-`skin` = the uuid of the skin to use
+This is the name that is shown above player heads and in tab. Players
+with bypass permissions will see the real name
 
-`disable chat` = whether chat should be disabled or not
+`skin` 
+
+This is the uuid (with dashses) of the skin to use for tab/players.
+Players with bypass permissions will see the real skin
+
+`disable chat`
+
+Whether chat should be disabled or not. Note: the user's display name is
+changed so any chat will show as the `username` name.
+
+`rewrite joins and leaves` 
+
+Rewrites the join and leave messages to use `username`. This uses the
+regular Minecraft translatable messages. If you are using a plugin that
+already modifies joins/leaves you should disable this and as long as 
+that plugin uses the players display name instead of username they will
+work correctly.
 
 ### Permissions
 
@@ -27,3 +45,6 @@ to true, defaults to OP
 
 `anonymous.skin.bypass` - allows viewing of the real name/skin, defaults
 to OP
+
+`anonymous.joinleave.bypass` - allows viewing of the real join/leave
+messages
