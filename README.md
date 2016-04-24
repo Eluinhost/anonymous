@@ -1,6 +1,6 @@
 # Anonymous Plugin
 
-**Required plugins: ProtocolLib + LibsDisguises**
+**Required plugin: ProtocolLib**
 
 Configuration:
 
