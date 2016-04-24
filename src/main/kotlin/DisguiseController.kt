@@ -16,8 +16,6 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
 import java.util.*
 
-const val BYPASS_PERMISSION = "uhc.anonymous.bypass"
-
 open class DisguiseController(
     protected val skinUUID: UUID,
     protected val name: String,
@@ -30,7 +28,7 @@ open class DisguiseController(
 
     protected val tabListPlayersListener = object : PacketAdapter(plugin, PacketType.Play.Server.PLAYER_INFO) {
         override fun onPacketSending(event: PacketEvent) {
-            if (!event.player.hasPermission(BYPASS_PERMISSION)) {
+            if (!event.player.hasPermission(SKIN_BYPASS_PERMISSION)) {
                 onTabListPacket(event.packet)
             }
         }

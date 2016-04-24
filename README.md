@@ -2,6 +2,10 @@
 
 **Required plugin: ProtocolLib**
 
+This plugin changes everyone in the game to have the same skin/name. The
+plugin also modifies the player's display name so chat plugins will 
+use the modified name too.
+
 Configuration:
 
 ```yaml
@@ -20,3 +24,6 @@ disable chat: true
 
 `anonymous.chat.bypass` - allows to chat even when `disable chat` is set
 to true, defaults to OP
+
+`anonymous.skin.bypass` - allows viewing of the real name/skin, defaults
+to OP

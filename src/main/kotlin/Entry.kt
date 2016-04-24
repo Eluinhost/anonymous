@@ -11,7 +11,9 @@ import java.util.*
 const val USERNAME_KEY: String = "username"
 const val SKIN_KEY: String = "skin"
 const val DISABLE_CHAT_KEY = "disable chat"
+
 const val CHAT_BYPASS_PERMISSION = "anonymous.chat.bypass"
+const val SKIN_BYPASS_PERMISSION = "anonymous.skin.bypass"
 
 class Entry() : JavaPlugin() {
     protected var disguiser: DisguiseController? = null
