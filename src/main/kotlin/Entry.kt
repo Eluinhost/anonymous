@@ -39,7 +39,13 @@ class Entry() : JavaPlugin() {
             return invalidConfig("Invalid UUID for `$SKIN_KEY`")
         }
 
-        disguiser = DisguiseController(uuid, name, this, ProtocolLibrary.getProtocolManager())
+        disguiser = DisguiseController(
+            skinUUID = uuid,
+            name = name,
+            profileParser = ProfileParser(),
+            plugin = this,
+            manager = ProtocolLibrary.getProtocolManager()
+        )
 
         // Disable chat if required
         if (config.getBoolean(DISABLE_CHAT_KEY)) {
