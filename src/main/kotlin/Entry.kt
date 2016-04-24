@@ -14,8 +14,7 @@ const val DISABLE_CHAT_KEY = "disable chat"
 const val CHAT_BYPASS_PERMISSION = "anonymous.chat.bypass"
 
 class Entry() : JavaPlugin() {
-    var disguiser: Disguiser? = null
-        private set
+    protected var disguiser: DisguiseController? = null
 
     fun invalidConfig(message: String) {
         logger.severe("Invalid configuration: $message")
@@ -40,17 +39,13 @@ class Entry() : JavaPlugin() {
             return invalidConfig("Invalid UUID for `$SKIN_KEY`")
         }
 
-        val disguiser = Disguiser(name, uuid, this)
-
-        // Register for packet sending interception
-        ProtocolLibrary.getProtocolManager().addPacketListener(disguiser)
-        // Register for events
-        server.pluginManager.registerEvents(disguiser, this)
-
-        // One time disguise all
-        server.onlinePlayers.forEach { disguiser.disguisePlayer(it) }
-
-        this.disguiser = disguiser
+        disguiser = DisguiseController(
+            skinUUID = uuid,
+            name = name,
+            profileParser = ProfileParser(),
+            plugin = this,
+            manager = ProtocolLibrary.getProtocolManager()
+        )
 
         // Disable chat if required
         if (config.getBoolean(DISABLE_CHAT_KEY)) {

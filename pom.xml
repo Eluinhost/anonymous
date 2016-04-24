@@ -29,10 +29,6 @@
             <id>dmulloy2-repo</id>
             <url>http://repo.dmulloy2.net/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>psmc</id>
-            <url>http://psmc.ca/repo/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -52,11 +48,6 @@
             <artifactId>ProtocolLib</artifactId>
             <version>3.6.5</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>LibsDisguises</groupId>
-            <artifactId>LibsDisguises</artifactId>
-            <version>8.6.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
