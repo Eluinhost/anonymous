@@ -11,8 +11,9 @@ import com.comphenix.protocol.wrappers.WrappedGameProfile
 import com.comphenix.protocol.wrappers.WrappedSignedProperty
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.plugin.Plugin
 import java.util.*
 
@@ -44,9 +45,9 @@ open class DisguiseController(
         }
     )
 
-    @EventHandler fun on(event: PlayerJoinEvent) = setupPlayer(event.player)
+    @EventHandler(priority = EventPriority.LOW) fun on(event: PlayerLoginEvent) = onPlayerLogin(event.player)
 
-    protected open fun setupPlayer(player: Player) {
+    protected open fun onPlayerLogin(player: Player) {
         player.displayName = name
     }
 
@@ -75,7 +76,7 @@ open class DisguiseController(
     init {
         manager.addPacketListener(tabListPlayersListener)
         plugin.server.pluginManager.registerEvents(this, plugin)
-        plugin.server.onlinePlayers.forEach { setupPlayer(it) }
+        plugin.server.onlinePlayers.forEach { onPlayerLogin(it) }
         plugin.server.scheduler.runTaskTimerAsynchronously(plugin, { updateSkin() }, 0, 60 * 20 * 5)
     }
 }
