@@ -73,7 +73,7 @@ open class CachedProfileParser(protected val parser: ProfileParser, protected va
             val now = Calendar.getInstance()
             cache[uuid] = Pair(now, fetched)
             cacheConfig.set(uuid.toString(), mapOf(
-                Pair("fetched", now),
+                Pair("fetched", CACHE_DATE_FORMAT.format(now.time)),
                 Pair("data", fetched.toYaml())
             ))
             cacheConfig.save(cacheFile)
