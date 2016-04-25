@@ -13,6 +13,7 @@ username: Anonymous
 skin: 640a5372-780b-4c2a-b7e7-8359d2f9a6a8
 disable chat: false
 rewrite joins and leaves: true
+refresh skin minutes: 5
 ```
 
 `username`
@@ -37,6 +38,11 @@ regular Minecraft translatable messages. If you are using a plugin that
 already modifies joins/leaves you should disable this and as long as 
 that plugin uses the players display name instead of username they will
 work correctly.
+
+`refresh skin minutes`
+
+How many mintues between attempting to refresh the stored skin. Cached
+skins are stored in the file `skin-cache.yml` in the config directory
 
 ### Permissions
 
