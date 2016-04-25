@@ -12,6 +12,7 @@ Configuration:
 username: Anonymous
 skin: 640a5372-780b-4c2a-b7e7-8359d2f9a6a8
 disable chat: false
+rewrite names in tab complete: true
 rewrite joins and leaves: true
 refresh skin minutes: 5
 ```
@@ -30,6 +31,10 @@ Players with bypass permissions will see the real skin
 
 Whether chat should be disabled or not. Note: the user's display name is
 changed so any chat will show as the `username` name.
+
+`rewrite names in tab complete`
+
+Whether to modify names tab completed in chat messages to `username`
 
 `rewrite joins and leaves` 
 
