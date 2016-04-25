@@ -6,12 +6,14 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.plugin.java.JavaPlugin
+import java.io.File
 import java.util.*
 
 const val USERNAME_KEY: String = "username"
 const val SKIN_KEY: String = "skin"
 const val DISABLE_CHAT_KEY = "disable chat"
 const val REWRITE_JOIN_LEAVES_KEY = "rewrite joins and leaves"
+const val SKIN_REFRESH_TIME_KEY = "refresh skin minutes"
 
 const val CHAT_BYPASS_PERMISSION = "anonymous.chat.bypass"
 const val SKIN_BYPASS_PERMISSION = "anonymous.skin.bypass"
@@ -46,9 +48,10 @@ class Entry() : JavaPlugin() {
         disguiser = DisguiseController(
             skinUUID = uuid,
             name = name,
-            profileParser = ProfileParser(),
+            profiles = CachedProfileParser(MojangAPIProfileParser(), File(dataFolder, "skin-cache.yml"), 2),
             plugin = this,
-            manager = ProtocolLibrary.getProtocolManager()
+            manager = ProtocolLibrary.getProtocolManager(),
+            refreshTime = config.getLong(SKIN_REFRESH_TIME_KEY)
         )
 
         // Disable chat if required

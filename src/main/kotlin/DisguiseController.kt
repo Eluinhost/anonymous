@@ -1,5 +1,6 @@
 package gg.uhc.anonymous
 
+import com.comphenix.executors.BukkitExecutors
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolManager
 import com.comphenix.protocol.events.PacketAdapter
@@ -16,16 +17,20 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.plugin.Plugin
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 open class DisguiseController(
     protected val skinUUID: UUID,
     protected val name: String,
-    protected val profileParser: ProfileParser,
+    protected val profiles: ProfileParser,
     protected val plugin: Plugin,
+    protected val refreshTime: Long,
     manager: ProtocolManager
 ) : Listener {
     protected val wrappedName = WrappedChatComponent.fromText(name)
     protected var texture: WrappedSignedProperty? = null
+
+    protected val asyncExecutor = BukkitExecutors.newAsynchronous(plugin)
 
     protected val tabListPlayersListener = object : PacketAdapter(plugin, PacketType.Play.Server.PLAYER_INFO) {
         override fun onPacketSending(event: PacketEvent) {
@@ -55,7 +60,7 @@ open class DisguiseController(
         plugin.logger.info("Starting update of skin texture")
 
         try {
-            val profile = profileParser.fetchForUuuid(skinUUID)
+            val profile = profiles.getForUuid(skinUUID)
             val x = profile.properties.find { it.name == "textures" }
                     ?: throw IllegalArgumentException("Skin data missing textures property")
 
@@ -77,6 +82,7 @@ open class DisguiseController(
         manager.addPacketListener(tabListPlayersListener)
         plugin.server.pluginManager.registerEvents(this, plugin)
         plugin.server.onlinePlayers.forEach { onPlayerLogin(it) }
-        plugin.server.scheduler.runTaskTimerAsynchronously(plugin, { updateSkin() }, 0, 60 * 20 * 5)
+
+        asyncExecutor.scheduleAtFixedRate({ updateSkin() }, 0, refreshTime, TimeUnit.MINUTES)
     }
 }

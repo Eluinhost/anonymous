@@ -2,3 +2,4 @@ username: Anonymous
 skin: 640a5372-780b-4c2a-b7e7-8359d2f9a6a8
 disable chat: false
 rewrite joins and leaves: true
+refresh skin minutes: 5
