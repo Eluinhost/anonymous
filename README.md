@@ -59,3 +59,17 @@ to OP
 
 `anonymous.joinleave.bypass` - allows viewing of the real join/leave
 messages
+
+# Known problems for leaking names
+
+There are still a couple of ways player names could be leaked:
+
+- `/me`/`/bukkit:me` this command still uses the regular name, blocking
+the command from being used will solve that issue
+
+- Commands will still tab complete names (e.g. `/tell <TAB>`), one way
+to fix this is to configure Spigot to disallow all tab completing
+
+- Other commands may leak names (like `/teams`). They will need to 
+either be blocked or have player permissions modified to avoid leaking
+names
