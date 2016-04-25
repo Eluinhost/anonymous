@@ -17,7 +17,7 @@ class DisableChatListener : Listener {
 
 class RewriteTabCompleteListener(protected val plugin: Plugin, protected val replacement: String) : Listener {
     @EventHandler(priority = EventPriority.HIGH) fun on(event: PlayerChatTabCompleteEvent) {
-        if (!event.player.hasPermission(REWRITE_TAB_COMPLETES_KEY)) {
+        if (!event.player.hasPermission(TAB_COMPLETE_BYPASS_PERMISSION)) {
             if (event.tabCompletions.removeAll(plugin.server.onlinePlayers.map { it.name })) {
                 event.tabCompletions.add(replacement)
             }
