@@ -1,6 +1,7 @@
 package gg.uhc.anonymous
 
 import com.comphenix.protocol.ProtocolLibrary
+import org.bukkit.configuration.InvalidConfigurationException
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.util.*
@@ -17,33 +18,32 @@ const val TAB_COMPLETE_BYPASS_PERMISSION = "anonymous.tabcomplete.bypass"
 const val SKIN_BYPASS_PERMISSION = "anonymous.skin.bypass"
 const val JOIN_LEAVE_BYPASS_PERMISSION = "anonymous.joinleave.bypass"
 
+/**
+ * Entry class created by Bukkit, [onEnable] is called on plugin load
+ */
 class Entry() : JavaPlugin() {
-    protected var disguiser: DisguiseController? = null
-
-    fun invalidConfig(message: String) {
-        logger.severe("Invalid configuration: $message")
+    fun invalidConfig(message: String) : InvalidConfigurationException {
+        val withPrefix = "Invalid configuration: $message";
+        logger.severe(withPrefix)
         isEnabled = false
+        return InvalidConfigurationException(withPrefix)
     }
 
     override fun onEnable() {
         config.options().copyDefaults(true)
         saveConfig()
 
-        val name: String? = config.getString(USERNAME_KEY)
-        val skin: String? = config.getString(SKIN_KEY)
+        val name: String = config.getString(USERNAME_KEY) ?: throw invalidConfig("Must supply the key `$USERNAME_KEY`")
+        val skin: String = config.getString(SKIN_KEY) ?: throw invalidConfig("Must supply the key `$SKIN_KEY`")
 
-        if (name == null || skin == null) {
-            return invalidConfig("Must supply both a `$USERNAME_KEY` and a `$SKIN_KEY` key")
-        }
-
-        val uuid: UUID
-        try {
-            uuid = UUID.fromString(skin)
+        val uuid: UUID = try {
+            UUID.fromString(skin)
         } catch (ex: IllegalArgumentException) {
-            return invalidConfig("Invalid UUID for `$SKIN_KEY`")
+            throw invalidConfig("Invalid UUID for `$SKIN_KEY`")
         }
 
-        disguiser = DisguiseController(
+        // Disguise controller handles it's own registering/scheduling
+        DisguiseController(
             skinUUID = uuid,
             name = name,
             profiles = CachedProfileParser(MojangAPIProfileParser(), File(dataFolder, "skin-cache.yml"), 2),

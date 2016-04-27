@@ -19,6 +19,16 @@ import org.bukkit.plugin.Plugin
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+/**
+ * Handles disguising players on join by changing their skin/tab name/display name
+ *
+ * @param skinUUID uuid of the skin to display
+ * @param name name of the player to show in tab/as display name
+ * @param profiles used to fetch skin data to show to clients
+ * @param plugin used to register events/packet listeners and for logging
+ * @param refreshTime amount of time between trying to refresh the skin data in minutes
+ * @param manager used to register packet listeners for modifying skins
+ */
 open class DisguiseController(
     protected val skinUUID: UUID,
     protected val name: String,
@@ -32,6 +42,11 @@ open class DisguiseController(
 
     protected val asyncExecutor = BukkitExecutors.newAsynchronous(plugin)
 
+    /**
+     * A listener that calls [onTabListPacket] when receiving a [tab list packet][PacketType.Play.Server.PLAYER_INFO]
+     * and the player does not have the [bypass permission][SKIN_BYPASS_PERMISSION]. This means anyone with the
+     * permission will *see* valid skins, not that people will see the player.
+     */
     protected val tabListPlayersListener = object : PacketAdapter(plugin, PacketType.Play.Server.PLAYER_INFO) {
         override fun onPacketSending(event: PacketEvent) {
             if (!event.player.hasPermission(SKIN_BYPASS_PERMISSION)) {
@@ -40,6 +55,11 @@ open class DisguiseController(
         }
     }
 
+    /**
+     * Changes the textures and name for the player/s on the tab list for the receiver
+     *
+     * @param packet raw packet to be modified
+     */
     protected open fun onTabListPacket(packet: PacketContainer) = packet.playerInfoDataLists.write(
         0,
         packet.playerInfoDataLists.read(0).map {
@@ -52,10 +72,21 @@ open class DisguiseController(
 
     @EventHandler(priority = EventPriority.LOW) fun on(event: PlayerLoginEvent) = onPlayerLogin(event.player)
 
+    /**
+     * Called whenever a player logs in, simply modifies their display name so that other plugins can use it
+     *
+     * @param player the player that has just logged in
+     */
     protected open fun onPlayerLogin(player: Player) {
         player.displayName = name
     }
 
+    /**
+     * Attempts to update the [stored skin textures][texture] from the [provided profile fetcher][profiles]. Logs
+     * information via [plugin] on success/failure.
+     *
+     * *NOTE: do not call this on the main thread as [profiles] can be working over the network*
+     */
     protected open fun updateSkin() {
         plugin.logger.info("Starting update of skin texture")
 
@@ -79,10 +110,18 @@ open class DisguiseController(
     }
 
     init {
+        // add listener for rewriting tab packets
         manager.addPacketListener(tabListPlayersListener)
+
+        // add listener for log in events
         plugin.server.pluginManager.registerEvents(this, plugin)
+
+        // force 'login event' for each player that is already online (/reload)
+        // we don't rebuild the tab list so these players will need to reload
+        // to see the new skin/names
         plugin.server.onlinePlayers.forEach { onPlayerLogin(it) }
 
+        // start updating the stored texture on a schedule, we run async because network could be involved
         asyncExecutor.scheduleAtFixedRate({ updateSkin() }, 0, refreshTime, TimeUnit.MINUTES)
     }
 }

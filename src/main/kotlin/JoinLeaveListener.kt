@@ -11,6 +11,14 @@ import org.bukkit.plugin.Plugin
 private const val JOIN_TRANSLATION_STRING = "multiplayer.player.joined"
 private const val QUIT_TRANSLATION_STRING = "multiplayer.player.left"
 
+/**
+ * A Bukkit event listener that listens on leave/join events and cancels the messages. It then sends a reformatted
+ * message to each player with the player's display name instead. Uses Minecraft translatable messages to send the
+ * message to clients for their own language. Players with the [JOIN_LEAVE_BYPASS_PERMISSION] will see the original
+ * messages instead.
+ *
+ * @param plugin used to send messages to online players
+ */
 class JoinLeaveListener(protected val plugin: Plugin) : Listener {
     @EventHandler fun on(event: PlayerJoinEvent) {
         event.joinMessage = ""
