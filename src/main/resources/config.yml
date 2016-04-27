@@ -3,4 +3,5 @@ skin: 640a5372-780b-4c2a-b7e7-8359d2f9a6a8
 disable chat: false
 rewrite names in tab complete: true
 rewrite joins and leaves: true
+rewrite deaths: true
 refresh skin minutes: 5

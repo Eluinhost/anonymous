@@ -11,12 +11,14 @@ const val SKIN_KEY: String = "skin"
 const val DISABLE_CHAT_KEY = "disable chat"
 const val REWRITE_TAB_COMPLETES_KEY = "rewrite names in tab complete"
 const val REWRITE_JOIN_LEAVES_KEY = "rewrite joins and leaves"
+const val REWRITE_DEATHS_KEY = "rewrite deaths"
 const val SKIN_REFRESH_TIME_KEY = "refresh skin minutes"
 
 const val CHAT_BYPASS_PERMISSION = "anonymous.chat.bypass"
 const val TAB_COMPLETE_BYPASS_PERMISSION = "anonymous.tabcomplete.bypass"
 const val SKIN_BYPASS_PERMISSION = "anonymous.skin.bypass"
 const val JOIN_LEAVE_BYPASS_PERMISSION = "anonymous.joinleave.bypass"
+const val DEATH_BYPASS_PERMISSION = "anonymous.death.bypass"
 
 /**
  * Entry class created by Bukkit, [onEnable] is called on plugin load
@@ -62,6 +64,10 @@ class Entry() : JavaPlugin() {
 
         if (config.getBoolean(REWRITE_JOIN_LEAVES_KEY)) {
             server.pluginManager.registerEvents(JoinLeaveListener(this), this)
+        }
+
+        if (config.getBoolean(REWRITE_DEATHS_KEY)) {
+            server.pluginManager.registerEvents(DeathListener(this, name), this)
         }
     }
 }

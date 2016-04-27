@@ -44,6 +44,12 @@ already modifies joins/leaves you should disable this and as long as
 that plugin uses the players display name instead of username they will
 work correctly.
 
+`rewrite deaths`
+
+Rewrites death messages to rewrite all online player names uses to 
+`username`. This runs in Event Priority HIGHEST so should be compatable
+with any death messages plugins
+
 `refresh skin minutes`
 
 How many mintues between attempting to refresh the stored skin. Cached
@@ -62,6 +68,8 @@ to OP
 
 `anonymous.joinleave.bypass` - allows viewing of the real join/leave
 messages
+
+`anonymous.deaths.bypass` - allows veiwing of the real death messages
 
 # Known problems for leaking names
 
