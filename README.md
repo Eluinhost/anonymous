@@ -57,14 +57,15 @@ skins are stored in the file `skin-cache.yml` in the config directory
 
 ### Permissions
 
+By default all OPs have the following permissions:
+
 `anonymous.chat.bypass` - allows to chat even when `disable chat` is set
-to true, defaults to OP
+to true
 
 `anonymous.tabcomplete.bypass` - allows tab completing real names in 
 chat messages
 
-`anonymous.skin.bypass` - allows viewing of the real name/skin, defaults
-to OP
+`anonymous.skin.bypass` - allows viewing of the real name/skin
 
 `anonymous.joinleave.bypass` - allows viewing of the real join/leave
 messages
