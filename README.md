@@ -3,8 +3,14 @@
 **Required plugin: ProtocolLib**
 
 This plugin changes everyone in the game to have the same skin/name. The
-plugin also modifies the player's display name so chat plugins will 
-use the modified name too.
+plugin also modifies the player's display name so other plugins can use 
+the modified name too.
+
+Other (optional) features:
+
+- disabling of chat
+- renaming names from cat tab complete
+- renaming names in join/leave/death messages
 
 Configuration:
 
